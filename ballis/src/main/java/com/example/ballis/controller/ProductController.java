@@ -66,16 +66,16 @@ public class ProductController {
 	
 	
 	
-	@GetMapping("/api/get/product/buy")
-	public ResponseEntity<List<ProductBuyDTO>> getProductSelection(@RequestParam Long productid) {
-	    try {
-	        List<ProductBuyDTO> lists = productService.getProductSelection(productid);
-	        return new ResponseEntity<>(lists, HttpStatus.OK);
-	    } catch (Exception e) {
-	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	}
-	
+//	@GetMapping("/api/get/product/buy")
+//	public ResponseEntity<List<ProductBuyDTO>> getProductSelection(@RequestParam Long productid) {
+//	    try {
+//	        List<ProductBuyDTO> lists = productService.getProductSelection(productid);
+//	        return new ResponseEntity<>(lists, HttpStatus.OK);
+//	    } catch (Exception e) {
+//	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//	    }
+//	}
+//	
 	
 	
 	
@@ -86,6 +86,7 @@ public class ProductController {
 		ProductBuyListDTO productBuyListDTO = new ProductBuyListDTO();
 		productBuyListDTO.setFast(productService.getFastProduct(productid));
 		productBuyListDTO.setNormal(productService.getNormalProduct(productid));
+		productBuyListDTO.setBoth(productService.getBothProduct(productid));
 		productBuyListDTO.setCheaper(productService.getCheaperProduct(productid));
 		
 		return new ResponseEntity<>(productBuyListDTO, HttpStatus.OK);

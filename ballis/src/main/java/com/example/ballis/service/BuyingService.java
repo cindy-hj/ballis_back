@@ -62,7 +62,7 @@ public class BuyingService {
 	public Buying save(BuyingAddDTO buyingDto) {
 		Buying buying = new Buying();
 		// member 객체 설정
-		Member member = memberRepository.findById(buyingDto.getMemberId())
+		Member member = memberRepository.findById(buyingDto.getMemberNumber())
 				.orElseThrow(()->new IllegalArgumentException("회원 아이디를 찾을 수 없습니다."));
 		buying.setMember(member);
 		// product 객체 설정

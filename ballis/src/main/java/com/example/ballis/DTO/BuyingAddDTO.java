@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuyingAddDTO {
 
-	private Long memberId; 
+	private Long memberNumber; 
 	private Long productId;
 	private Integer productSize;
 	private Integer wishPrice;

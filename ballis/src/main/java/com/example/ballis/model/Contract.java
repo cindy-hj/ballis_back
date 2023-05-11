@@ -23,47 +23,49 @@ public class Contract {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+   
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
-	
+   
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "target_buying_id")
 	private Buying buying; 
-	
+   
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "target_selling_id")
 	private Selling selling;
-	
+   
 	@Column(nullable = false)
 	private Long buyerNumber;
-	
-	@Column(nullable = false)
+   
 	private Long sellerNumber;
-	
+   
 	@Column(nullable = false)
 	private LocalDateTime contractDate;
-	
+   
 	@Column(columnDefinition = "TINYINT")
 	private Integer sellingStatus;
-	
+   
 	@Column(columnDefinition = "TINYINT")
 	private Integer buyingStatus;
-	
+   
 	@Column(nullable = false)
 	private Integer price;
-	
+   
+	@Column(nullable = false)
+	private Integer productSize;
+   
 	private LocalDateTime paidDate;
-	
+   
 	private Integer paidPrice;
-	
+   
 	@Column(nullable = false)
 	private LocalDateTime registDate;
-	
+   
 	private LocalDateTime modifiedDate;
 
 	

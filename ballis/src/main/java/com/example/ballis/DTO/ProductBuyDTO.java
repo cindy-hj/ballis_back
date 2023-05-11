@@ -26,4 +26,5 @@ public class ProductBuyDTO {
 	private Integer sellWishPrice;
 	private Integer inventoryDiv;
 	private Long sellerNumber;
+	private Long sellingId;
 }
