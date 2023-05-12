@@ -10,12 +10,13 @@ import com.example.ballis.DTO.ProductAllDTO;
 import com.example.ballis.DTO.ProductNewDTO;
 import com.example.ballis.DTO.ProductOneDTO;
 import com.example.ballis.DTO.ProductPopDTO;
+import com.example.ballis.DTO.ProductSellDTO;
 import com.example.ballis.DTO.ProductBuyDTO;
-import com.example.ballis.DTO.ProductBuyMethodDTO;
+import com.example.ballis.DTO.ProductMethodDTO;
 import com.example.ballis.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-	
+	// 메인-신상품 목록
 	@Query(value="SELECT "
 	          + "new com.example.ballis.DTO.ProductNewDTO"
 	          + "(prod.id, prod.productEngName, img.imagePath, bd.brandName, sell.wishPrice, sell.inventoryDiv) "
@@ -38,7 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	            nativeQuery = false)
 	List<ProductNewDTO> getProductNew();
 	
-
+	// 메인-인기상품 목록
 	@Query(value="SELECT "
 			+ "new com.example.ballis.DTO.ProductPopDTO"
 			+ "(prod.id, prod.productEngName, MAX(img.imagePath), bd.brandName, sell.wishPrice, sell.inventoryDiv, COUNT(cont.id)) "
@@ -63,7 +64,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			nativeQuery = false)
 	List<ProductPopDTO> getProductPop();
 	
-	
+	// 상세-상품 1개
 	@Query(value="SELECT "
 	          + "new com.example.ballis.DTO.ProductOneDTO"
 	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.color, prod.launchingDate, prod.launchingPrice, "
@@ -89,42 +90,39 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	            nativeQuery = false)
 	List<ProductOneDTO> getProductOne(@Param("productid") Long productid);
 	
-	// 어디서 참조하고 있는지..?
+//	// 어디서 참조하고 있는지..?
+//	@Query(value="SELECT "
+//	          + "new com.example.ballis.DTO.ProductBuyDTO"
+//	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
+//	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, sell.id) "
+//	            + "FROM Product prod "
+//	            + "INNER JOIN Image img ON prod.id = img.targetId "
+//	            + "LEFT JOIN Selling sell ON prod.id = sell.product "
+//	            + "WHERE prod.id = :productid "
+//	            + "AND img.pageDiv = 1 AND img.mainImageDiv = 1 AND (sell.sellingStatus = 1 OR sell.sellingStatus = 11) "
+//	            + "AND (sell.inventoryDiv = 1 OR "
+//	            + "(sell.inventoryDiv = 2 AND NOT EXISTS "
+//	            + "(SELECT 1 FROM Selling subSell WHERE prod.id = subSell.product "
+//	            + "AND sell.wishPrice = subSell.wishPrice "
+//	            + "AND subSell.inventoryDiv = 1))) "
+//	            + "AND sell.wishPrice = "
+//	            + "(SELECT MIN(sell2.wishPrice) FROM Selling sell2 "
+//	            + "WHERE sell2.product = prod.id AND sell2.product = prod.id "
+//	            + "AND sell2.productSize = sell.productSize"
+//	            + "AND (sell2.sellingStatus = 1 OR sell2.sellingStatus = 11)) "	 
+//	            + "GROUP BY prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, "
+//	            + "prod.sizeMax, prod.sizeUnit, img.imagePath, sell.sellingStatus, sell.productSize, sell.inventoryDiv, sell.member.memberNumber, sell.id "
+//				+ "ORDER BY MIN(sell.wishPrice) ASC"
+//	            ,nativeQuery = false)
+//	List<ProductBuyDTO> getProductSelection(@Param("productid") Long productid);
+//	
+//	
+	
+	// 구매-보관상품 데이터만 출력
 	@Query(value="SELECT "
 	          + "new com.example.ballis.DTO.ProductBuyDTO"
 	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
-	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, sell.id) "
-	            + "FROM Product prod "
-	            + "INNER JOIN Image img ON prod.id = img.targetId "
-	            + "LEFT JOIN Selling sell ON prod.id = sell.product "
-	            + "WHERE prod.id = :productid "
-	            + "AND img.pageDiv = 1 AND img.mainImageDiv = 1 AND (sell.sellingStatus = 1 OR sell.sellingStatus = 11) "
-	            + "AND (sell.inventoryDiv = 1 OR "
-	            + "(sell.inventoryDiv = 2 AND NOT EXISTS "
-	            + "(SELECT 1 FROM Selling subSell WHERE prod.id = subSell.product "
-	            + "AND sell.wishPrice = subSell.wishPrice "
-	            + "AND subSell.inventoryDiv = 1))) "
-	            + "AND sell.wishPrice = "
-	            + "(SELECT MIN(sell2.wishPrice) FROM Selling sell2 "
-	            + "WHERE sell2.product = prod.id AND sell2.product = prod.id "
-	            + "AND sell2.productSize = sell.productSize"
-	            + "AND (sell2.sellingStatus = 1 OR sell2.sellingStatus = 11)) "	 
-	            + "GROUP BY prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, "
-	            + "prod.sizeMax, prod.sizeUnit, img.imagePath, sell.sellingStatus, sell.productSize, sell.inventoryDiv, sell.member.memberNumber, sell.id "
-				+ "ORDER BY MIN(sell.wishPrice) ASC"
-	            ,nativeQuery = false)
-	List<ProductBuyDTO> getProductSelection(@Param("productid") Long productid);
-	
-	
-	
-
-	
-	
-	// 보관상품 데이터만 출력
-	@Query(value="SELECT "
-	          + "new com.example.ballis.DTO.ProductBuyDTO"
-	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
-	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, sell.id) "
+	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, MIN(sell.id)) "
 	            + "FROM Product prod "
 	            + "INNER JOIN Image img ON prod.id = img.targetId "
 	            + "LEFT JOIN Selling sell ON prod.id = sell.product "
@@ -135,16 +133,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	            + "WHERE sell2.product = prod.id AND sell2.productSize = sell.productSize "
 	            + "AND sell2.inventoryDiv = 1 AND sell2.sellingStatus = 11) "	 
 	            + "GROUP BY prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, "
-	            + "prod.sizeMax, prod.sizeUnit, img.imagePath, sell.sellingStatus, sell.productSize, sell.inventoryDiv, sell.member.memberNumber, sell.id "
+	            + "prod.sizeMax, prod.sizeUnit, img.imagePath, sell.sellingStatus, sell.productSize, sell.inventoryDiv, sell.member.memberNumber "
 				+ "ORDER BY MIN(sell.wishPrice) ASC"
 	            ,nativeQuery = false)
 	List<ProductBuyDTO> getFastProduct(@Param("productid") Long productid);
 	
-	// 일반상품 데이터만 출력
+	// 구매-일반상품 데이터만 출력
 	@Query(value="SELECT "
 	          + "new com.example.ballis.DTO.ProductBuyDTO"
 	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
-	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, sell.id) "
+	          + "img.imagePath, sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, MIN(sell.id)) "
 	            + "FROM Product prod "
 	            + "INNER JOIN Image img ON prod.id = img.targetId "
 	            + "LEFT JOIN Selling sell ON prod.id = sell.product "
@@ -160,14 +158,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	            ,nativeQuery = false)
 	List<ProductBuyDTO> getNormalProduct(@Param("productid") Long productid);
 	
-	
-	
-	
-	
-	
-	
+	// 구매-즉시구매 또는 구매입찰, 판매-즉시판매 또는 판매입찰
 	@Query(value="SELECT "
-	          + "new com.example.ballis.DTO.ProductBuyMethodDTO"
+	          + "new com.example.ballis.DTO.ProductMethodDTO"
 	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, img.imagePath, "
 	          + "sell.sellingStatus, sell.productSize, MIN(sell.wishPrice), sell.inventoryDiv, sell.member.memberNumber, "
 	          + "buy.buyingStatus, buy.productSize, MAX(buy.wishPrice), buy.member.memberNumber) "
@@ -189,10 +182,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	            + "sell.sellingStatus, sell.productSize, sell.inventoryDiv, sell.member.memberNumber, "
 	            + "buy.buyingStatus, buy.productSize, buy.member.memberNumber",
 	            nativeQuery = false)
-	List<ProductBuyMethodDTO> getProductBySize(@Param("productid") Long productid, @Param("size") Integer size);
+	List<ProductMethodDTO> getProductBySize(@Param("productid") Long productid, @Param("size") Integer size);
 	
-	
-	
+	// 전체 판매상품 리스트
 	@Query(value="SELECT "
 			+ "new com.example.ballis.DTO.ProductAllDTO"
 			+ "(prod.id, prod.productEngName, prod.productKorName, MAX(img.imagePath), bd.brandName, "
@@ -228,5 +220,22 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     		nativeQuery = false)
     List<ProductAllDTO> getProductAll(@Param("sort") Integer sort);
 	
-
+	// 판매-대표정보
+	@Query(value="SELECT "
+	          + "new com.example.ballis.DTO.ProductSellDTO"
+	          + "(prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
+	          + "img.imagePath, buy.buyingStatus, buy.productSize, MAX(buy.wishPrice), buy.member.memberNumber, MIN(buy.id)) "
+	            + "FROM Product prod "
+	            + "INNER JOIN Image img ON prod.id = img.targetId "
+	            + "LEFT JOIN Buying buy ON prod.id = buy.product "
+	            + "WHERE prod.id = :productid "
+	            + "AND img.pageDiv = 1 AND img.mainImageDiv = 1 AND buy.buyingStatus = 1 "
+	            + "AND buy.wishPrice = "
+	            + "(SELECT MAX(buy2.wishPrice) FROM Buying buy2 "
+	            + "WHERE buy2.product = prod.id AND buy2.productSize = buy.productSize AND buy2.buyingStatus = 1 ) "
+	            + "GROUP BY prod.id, prod.productEngName, prod.productKorName, prod.modelNumber, prod.sizeMin, prod.sizeMax, prod.sizeUnit, "
+	            + "img.imagePath, buy.buyingStatus, buy.productSize, buy.member.memberNumber "
+				+ "ORDER BY MAX(buy.wishPrice) DESC"
+	            ,nativeQuery = false)
+	List<ProductSellDTO> getSellingProduct(@Param("productid") Long productid);
 }

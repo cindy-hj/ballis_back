@@ -11,7 +11,7 @@ import com.example.ballis.model.Selling;
 
 public interface SellingRepository extends JpaRepository<Selling, Long> {
 	
-	List<Selling> findByProduct_Id(@Param("productid") Long productid);
+	List<Selling> findByProduct_IdOrderByRegistDateDesc(@Param("productid") Long productid);
 	
 }
 

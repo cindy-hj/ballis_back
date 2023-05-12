@@ -21,8 +21,9 @@ import com.example.ballis.DTO.ProductNewDTO;
 import com.example.ballis.DTO.ProductOneDTO;
 import com.example.ballis.DTO.ProductPopDTO;
 import com.example.ballis.DTO.ProductSearchResponseDTO;
+import com.example.ballis.DTO.ProductSellDTO;
 import com.example.ballis.DTO.ProductBuyListDTO;
-import com.example.ballis.DTO.ProductBuyMethodDTO;
+import com.example.ballis.DTO.ProductMethodDTO;
 import com.example.ballis.service.ProductService;
 
 
@@ -80,8 +81,8 @@ public class ProductController {
 	
 	
 	
-	// 각 사이즈별 최저가 상품 1.빠른배송, 2.일반배송, 3.둘다 존재할경우 둘중 하나, 4.둘다 존재할 경우 둘중 하나& 둘중 하나만 존재할경우 그 하나
-	@GetMapping("/api/get/product/buy/all")
+	// 구매-각 사이즈별 최저가 상품 1.빠른배송, 2.일반배송, 3.둘다 존재할경우 둘중 하나, 4.둘다 존재할 경우 둘중 하나& 둘중 하나만 존재할경우 그 하나
+	@GetMapping("/api/get/product/buy")
 	public ResponseEntity<ProductBuyListDTO> getProduct(@RequestParam Long productid) {
 		ProductBuyListDTO productBuyListDTO = new ProductBuyListDTO();
 		productBuyListDTO.setFast(productService.getFastProduct(productid));
@@ -92,18 +93,18 @@ public class ProductController {
 		return new ResponseEntity<>(productBuyListDTO, HttpStatus.OK);
 	}
 		
-	
-	@GetMapping("/api/get/product/buy/method")
-	public ResponseEntity<List<ProductBuyMethodDTO>> getProductBySize(@RequestParam Long productid, @RequestParam Integer size) {
+	// 구매입찰/즉시구매, 판매입찰/즉시판매 선택시  
+	@GetMapping("/api/get/product/method")
+	public ResponseEntity<List<ProductMethodDTO>> getProductBySize(@RequestParam Long productid, @RequestParam Integer size) {
 	    try {
-	        List<ProductBuyMethodDTO> lists = productService.getProductBySize(productid, size);
+	        List<ProductMethodDTO> lists = productService.getProductBySize(productid, size);
 	        return new ResponseEntity<>(lists, HttpStatus.OK);
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
 	
-	
+	// 상품 전체 리스트
 	@PostMapping("/api/get/product/all")
 	public ProductSearchResponseDTO search(@RequestBody ProductFilterDTO filterdto, @RequestParam Integer sort) {
 		
@@ -163,5 +164,15 @@ public class ProductController {
 		return resultDto;
 	}
 	
+	// 판매-대표 정보
+	@GetMapping("/api/get/product/sell")
+	public ResponseEntity<List<ProductSellDTO>> getSellingProduct(@RequestParam Long productid) {
+	    try {
+	        List<ProductSellDTO> lists = productService.getSellingProduct(productid);
+	        return new ResponseEntity<>(lists, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
 	
 }

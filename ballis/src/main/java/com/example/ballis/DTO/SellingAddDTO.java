@@ -2,21 +2,13 @@ package com.example.ballis.DTO;
 
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class BuyingAddDTO {
-
+public class SellingAddDTO {
 	private Long memberNumber; 
 	private Long productId;
 	private Integer productSize;
 	private Integer wishPrice;
 	private LocalDateTime expiryDate;
-//	private LocalDateTime registDate;
-//	private Integer buyingStatus;
-//	private Integer dataStatus;
 }

@@ -74,7 +74,7 @@ public class ContractService {
 		if("fast".equals(type)) {
 			contract.setSellingStatus(null);
 		}
-		// 즉시구매
+		// 즉시구매, 즉시판매
 		if("normal".equals(type)) {
 			contract.setSellingStatus(21);
 		}

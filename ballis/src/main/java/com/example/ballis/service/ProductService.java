@@ -10,8 +10,9 @@ import com.example.ballis.DTO.ProductAllDTO;
 import com.example.ballis.DTO.ProductNewDTO;
 import com.example.ballis.DTO.ProductOneDTO;
 import com.example.ballis.DTO.ProductPopDTO;
+import com.example.ballis.DTO.ProductSellDTO;
 import com.example.ballis.DTO.ProductBuyDTO;
-import com.example.ballis.DTO.ProductBuyMethodDTO;
+import com.example.ballis.DTO.ProductMethodDTO;
 import com.example.ballis.repository.ProductRepository;
 
 @Service
@@ -35,9 +36,9 @@ public class ProductService {
 		return productRepository.getProductAll(sort);	
 	}
 
-	public List<ProductBuyDTO> getProductSelection(Long productid) {
-		return productRepository.getProductSelection(productid);	
-	}
+//	public List<ProductBuyDTO> getProductSelection(Long productid) {
+//		return productRepository.getProductSelection(productid);	
+//	}
 	
 	// 빠른 배송 상품 중 각 사이즈별 최저가 데이터만 출력
 	public List<ProductBuyDTO> getFastProduct(Long productid) {
@@ -100,7 +101,12 @@ public class ProductService {
 	}
 	
 
-	public List<ProductBuyMethodDTO> getProductBySize(Long productid, Integer size) {
+	public List<ProductMethodDTO> getProductBySize(Long productid, Integer size) {
 		return productRepository.getProductBySize(productid, size);
+	}
+	
+	// 판매-대표정보
+	public List<ProductSellDTO> getSellingProduct(Long productid) {
+		return productRepository.getSellingProduct(productid);
 	}
 }

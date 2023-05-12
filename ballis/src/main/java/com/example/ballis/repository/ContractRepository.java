@@ -21,7 +21,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 			+ "LEFT JOIN Selling sell ON con.selling = sell.id "
 			+ "LEFT JOIN Buying buy ON con.buying = buy.id " 
 			+ "WHERE prod.id = :productid " // con.product = :productid 는 오류는 안나는데 데이터 조회가 안됨
-			+ "ORDER BY con.price DESC",  
+			+ "ORDER BY con.contractDate ASC, con.price DESC",  
 			nativeQuery = false)
 	List<ContractChartDTO> getContractChart(@Param("productid") Long productid);
 

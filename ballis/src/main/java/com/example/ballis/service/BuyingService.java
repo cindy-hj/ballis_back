@@ -27,9 +27,9 @@ public class BuyingService {
 	@Autowired
 	private BuyingRepository buyingRepository;
 	@Autowired
-	private ProductRepository productRepository;
-	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
 	// 구매입찰 차트
 	public List<BuyingChartDTO> findBuyingByProduct_Id(Long productid) {
@@ -79,4 +79,17 @@ public class BuyingService {
 		
 		return buyingRepository.save(buying);
 	}
+	
+	// 구매입찰 거래 체결 - 즉시판매
+	@Transactional
+	public Buying updateBuying(Long id) {
+		Buying buying = buyingRepository.findById(id)
+				.orElseThrow(()->new IllegalArgumentException("buying id를 찾을 수 없습니다."));
+		
+		buying.setBuyingStatus(99);
+		buying.setModifiedDate(LocalDateTime.now());
+	
+		return buyingRepository.save(buying);
+	}
+	
 }

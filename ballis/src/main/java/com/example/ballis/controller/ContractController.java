@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ballis.DTO.ContractAddDTO;
 import com.example.ballis.DTO.ContractChartDTO;
 import com.example.ballis.model.Contract;
+import com.example.ballis.service.BuyingService;
 import com.example.ballis.service.ContractService;
 import com.example.ballis.service.SellingService;
 
@@ -24,7 +25,9 @@ public class ContractController {
 	private ContractService contractService;
 	@Autowired
 	private SellingService sellingService;
-	
+	@Autowired
+	private BuyingService buyingService;
+	// 체결거래 차트
 	@GetMapping("/api/get/contract/chart")
 	public ResponseEntity<List<ContractChartDTO>> getProductOne(@RequestParam Long productid) {
 	    try {
@@ -35,11 +38,24 @@ public class ContractController {
 	    }
 	}
 	
-	@PostMapping("/api/post/contract")
-	public ResponseEntity<?> addContract (@RequestBody ContractAddDTO contractDto, @RequestParam String type) {
+	// 판매입찰(빠른배송, 즉시구매) 거래 체결
+	@PostMapping("/api/post/contract/sell")
+	public ResponseEntity<?> addContractSell (@RequestBody ContractAddDTO contractDto, @RequestParam String type) {
 		try {
 			Contract contractInfo = contractService.save(contractDto, type);
 			sellingService.updateSelling(contractDto.getSellingId(), type);
+			return new ResponseEntity<Contract>(contractInfo, HttpStatus.OK);		
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	// 구매입찰(즉시판매) 거래 체결
+	@PostMapping("/api/post/contract/buy")
+	public ResponseEntity<?> addContractBuy (@RequestBody ContractAddDTO contractDto, @RequestParam String type) {
+		try {
+			Contract contractInfo = contractService.save(contractDto, type);
+			buyingService.updateBuying(contractDto.getBuyingId());
 			return new ResponseEntity<Contract>(contractInfo, HttpStatus.OK);		
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
