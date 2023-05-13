@@ -109,4 +109,7 @@ public class ProductService {
 	public List<ProductSellDTO> getSellingProduct(Long productid) {
 		return productRepository.getSellingProduct(productid);
 	}
+	
+	// 빠른 배송 상품 존재하는지
+	
 }

@@ -2,7 +2,6 @@ package com.example.ballis.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,4 +108,12 @@ public class SellingService {
 		}
 		return sellingRepository.save(selling);
 	}
+	
+	// 빠른 배송 상품 존재 여부 확인
+	public boolean hasStorageProduct(Long productId) {
+	    List<Selling> sellings = sellingRepository.findByInventoryDivAndSellingStatusAndProductId(1, 11, productId);
+	    return sellings != null && !sellings.isEmpty();
+	}
+	
+	
 }

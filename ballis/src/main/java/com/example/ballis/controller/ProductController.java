@@ -2,7 +2,9 @@ package com.example.ballis.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ballis.DTO.ProductAllDTO;
-import com.example.ballis.DTO.ProductBuyDTO;
 import com.example.ballis.DTO.ProductFilterDTO;
 import com.example.ballis.DTO.ProductNewDTO;
 import com.example.ballis.DTO.ProductOneDTO;
@@ -25,6 +26,7 @@ import com.example.ballis.DTO.ProductSellDTO;
 import com.example.ballis.DTO.ProductBuyListDTO;
 import com.example.ballis.DTO.ProductMethodDTO;
 import com.example.ballis.service.ProductService;
+import com.example.ballis.service.SellingService;
 
 
 @RestController
@@ -32,23 +34,49 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private SellingService sellingService;
 	
+
+	// 메인 - 발매일 순 조회 & 빠른배송 여부 확인
 	@GetMapping("/api/get/product/new")
-	public ResponseEntity<List<ProductNewDTO>> getProductNew() {
+	public ResponseEntity<Map<String, Object>> getProductNew() {
 	    try {
+	        Map<String, Object> result = new HashMap<>();
 	        List<ProductNewDTO> lists = productService.getProductNew();
-	        return new ResponseEntity<>(lists, HttpStatus.OK);
+	        List<Map<String, Object>> storage = new ArrayList<>();
+	        for (ProductNewDTO productNewDTO : lists) {
+	            boolean hasStorageProduct = sellingService.hasStorageProduct(productNewDTO.getId());
+	            Map<String, Object> storageMap = new HashMap<>();
+	            storageMap.put("id", productNewDTO.getId());
+	            storageMap.put("hasStorage", hasStorageProduct);
+	            storage.add(storageMap);
+	        }
+	        result.put("lists", lists);
+	        result.put("storage", storage);
+	        return new ResponseEntity<>(result, HttpStatus.OK);
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
 	
-	    
+	// 메인 - 인기순 조회 && 빠른배송 여부 확인
 	@GetMapping("/api/get/product/pop")
-	public ResponseEntity<List<ProductPopDTO>> getProductPop() {
+	public ResponseEntity<Map<String, Object>> getProductPop() {
 	    try {
+	    	Map<String, Object> result = new HashMap<>();
 	        List<ProductPopDTO> lists = productService.getProductPop();
-	        return new ResponseEntity<>(lists, HttpStatus.OK);
+	        List<Map<String, Object>> storage = new ArrayList<>();
+	        for (ProductPopDTO productPopDTO : lists) {
+	            boolean hasStorageProduct = sellingService.hasStorageProduct(productPopDTO.getId());
+	            Map<String, Object> storageMap = new HashMap<>();
+	            storageMap.put("id", productPopDTO.getId());
+	            storageMap.put("hasStorage", hasStorageProduct);
+	            storage.add(storageMap);
+	        }
+	        result.put("lists", lists);
+	        result.put("storage", storage);
+	        return new ResponseEntity<>(result, HttpStatus.OK);
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
@@ -156,7 +184,6 @@ public class ProductController {
 		            })
 		            .collect(Collectors.toList());
 		}
-		
 		
 		ProductSearchResponseDTO resultDto = new ProductSearchResponseDTO();
 		resultDto.setProductAllList(targetList);

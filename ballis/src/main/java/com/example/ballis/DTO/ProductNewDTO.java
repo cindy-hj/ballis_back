@@ -14,6 +14,6 @@ public class ProductNewDTO {
 	private String imagePath;
 	private String brandName;
 	private Integer wishPrice;
-	private Integer inventoryDiv;
+//	private Boolean hasStorageProduct;
 		
 }

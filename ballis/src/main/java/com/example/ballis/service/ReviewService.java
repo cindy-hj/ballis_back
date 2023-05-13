@@ -18,6 +18,10 @@ public class ReviewService {
 	public List<ReviewDTO> getReviewAll() {
 		return reviewRepository.getReviewAll();
 	}
+	
+	public List<ReviewDTO> getReviewOneProduct (Long productid) {
+		return reviewRepository.getReviewOneProduct(productid);
+	}
 
 	public List<Review> findById(int reviewid) {
 		return reviewRepository.findById(reviewid);

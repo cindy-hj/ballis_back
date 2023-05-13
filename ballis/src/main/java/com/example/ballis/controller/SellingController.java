@@ -37,4 +37,11 @@ public class SellingController {
 	}
 	
 	
+//	@GetMapping("/api/get/sell/test")
+//	public List<Selling> findSellingProduct(@RequestParam Long productid) {
+//		return sellingService.findByOneProduct(1, 11, productid);
+//				
+//				
+//	}
+	
 }

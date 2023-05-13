@@ -27,10 +27,22 @@ public class ReviewController {
 	@Autowired 
 	private ImageService imageService;
 	
+	// 메인 - 전체 리뷰 출력
 	@GetMapping("/api/get/review/all")
 	public ResponseEntity<List<ReviewDTO>> getReviewAll() {
 	    try {
 	        List<ReviewDTO> reviews = reviewService.getReviewAll();
+	        return new ResponseEntity<>(reviews, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	
+	// 상세 - 한 상품에 해당하는 리뷰 출력
+	@GetMapping("/api/get/review/product")
+	public ResponseEntity<List<ReviewDTO>> getReviewOneProduct(@RequestParam Long productid) {
+	    try {
+	        List<ReviewDTO> reviews = reviewService.getReviewOneProduct(productid);
 	        return new ResponseEntity<>(reviews, HttpStatus.OK);
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
