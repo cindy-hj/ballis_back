@@ -61,6 +61,8 @@ public class PaymentService {
         payment.setPaymentType(paymentDto.getPaymentType());
         payment.setPrice(paymentDto.getPrice());
         payment.setRegistDate(LocalDateTime.now());
+        payment.setImpUid(paymentDto.getImpUid());
+        payment.setMerchantUid(paymentDto.getMerchantUid());       
         
         return paymentRepository.save(payment);
     }

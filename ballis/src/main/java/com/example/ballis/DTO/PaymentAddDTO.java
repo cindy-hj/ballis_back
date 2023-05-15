@@ -1,6 +1,5 @@
 package com.example.ballis.DTO;
 
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +22,8 @@ public class PaymentAddDTO {
 	   private String message;
 	   private Integer paymentType;
 	   private Integer price;
-	   private LocalDateTime registDate;
+	   
+	   private String impUid;
+	   private String merchantUid;
 	   
 }
